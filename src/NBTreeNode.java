@@ -41,8 +41,4 @@ public class NBTreeNode<T> {
 		pageLink.add(previous+1, link);
 		size++;
 	}
-	
-	public void addLink(Integer i, NBTreeNode<T> node){
-		pageLink.add(i, node);
-	}
 }

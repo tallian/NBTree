@@ -293,38 +293,11 @@ public class NBTree<T> implements IBinaryTree<T>, Iterable<NBTreeNode<T>>, Itera
 
 	@Override
 	public boolean contains(Comparable<T> o) {
-		NBTreeNode<T> current = header;
-		NBTreeNode<T> link;
-		
-		do {
-			link = null;
-			if (o.compareTo((T) current.pageInt.get(0)) < 0) {
-				link = (NBTreeNode<T>) current.firstLink;
-			} else {
-				int last = current.pageInt.size()-1;
-				for(int i=0; i<last; i++) {
-					if ((o.compareTo((T) current.pageInt.get(i)) > 0) && (o.compareTo((T) current.pageInt.get(i+1)) < 0)) {
-						if (current.pageLink.get(last) != null) {
-							link = current.pageLink.get(i);
-						}
-					} else if (o.compareTo((T) current.pageInt.get(i)) == 0) {
-						return true;
-					} 
-				}
-				if (link == null) {
-					if (o.compareTo((T) current.pageInt.get(last)) == 0) {
-						return true;
-					} 
-					if (o.compareTo((T) current.pageInt.get(last)) > 0) {
-						if (current.pageLink.get(last) != null) {
-							link = current.pageLink.get(last);
-						}
-					}
-				}
-			}
-			current = link;
-		} while (link != null);
-		return false;
+		if (find(o) == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	@Override
