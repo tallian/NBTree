@@ -17,9 +17,9 @@ public class Main {
 		car.start();
 		
 		ArrayList<Turnstile> t = new ArrayList<Turnstile>();
-		t.add(new Turnstile(controller));
-		t.add(new Turnstile(controller));
-		t.add(new Turnstile(controller));
+		t.add(new Turnstile(controller, 1));
+		t.add(new Turnstile(controller, 2));
+		t.add(new Turnstile(controller, 3));
 		
 		ArrayList<Thread> tu = new ArrayList<Thread>();
 		tu.add(new Thread(t.get(0)));

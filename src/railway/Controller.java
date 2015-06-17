@@ -1,44 +1,34 @@
 package railway;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Controller implements Runnable {
 	Cart cart;
     boolean stop;
-    Lock lock = new ReentrantLock();
-    Integer i;
-	BlockingQueue<Tourist> tourists = new ArrayBlockingQueue<Tourist>(100);
-	
-	static Semaphore bisy = new Semaphore(1);
+    AtomicInteger i = new AtomicInteger(0);
+	//static Semaphore bisy = new Semaphore(1);
 
 	Controller(Cart c) {
 		cart = c;
 		stop = false;
-		i = 0;
 	}
 	
-	public void add() throws InterruptedException {
+	public void add(Integer tourist) throws InterruptedException {
 		synchronized (this) {
-			bisy.acquire();
-			i++;
-			System.out.println("Турист зарегистрирован контролёром, туристов: "+ i);
-			bisy.release();
+			i.set(i.get()+1);
+			System.out.println("Турист № " + tourist + " зарегистрирован контролёром, туристов: "+ i);
+		}
+		if (i.get()>=5 && !cart.moving.get()) {
+			synchronized (this) {
+				i.set(i.get()-5);
+				System.out.println("Пять туристов погрузилось, туристов осталось: "+ i);
+			}
+			cart.start();
 		}
 	}
+	
 	@Override
 	public void run() {
 		do { 
-			synchronized (this) {
-				if (i>=5 && !cart.moving) {
-					i-=5;
-					System.out.println("Пять туристов погрузилось, туристов осталось: "+ i);
-					cart.start();
-				}
-			}
 		} while (!stop);
 	}
-
 }

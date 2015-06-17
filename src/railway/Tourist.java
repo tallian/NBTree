@@ -12,11 +12,10 @@ public class Tourist implements Runnable{
 	public void run() {
 		System.out.println("Турист №" + i + " пришёл");
 		try {
-			t.callController();
+			t.callController(i);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 }

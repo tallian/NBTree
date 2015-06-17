@@ -1,20 +1,20 @@
 package railway;
-import java.util.concurrent.Semaphore;
 
 public class Turnstile implements Runnable {
 	Controller controller;
 	Boolean stop;
-	static Semaphore bisy = new Semaphore(1);
+	Integer index;
 
-	Turnstile (Controller cont){
+	Turnstile (Controller cont, int ind){
 		controller = cont;
 		stop = false;
+		index = ind;
 	}
-	public void callController() throws InterruptedException {
-			bisy.acquire();
-			System.out.println("Турист отметился в турникете");
-			controller.add();
-			bisy.release();
+	public void callController(Integer tourist) throws InterruptedException {
+		synchronized (this) {
+			System.out.println("Турист № " + tourist + " отметился в турникете № "+index);
+			controller.add(tourist);
+		}
 	}
 	
 	public void run() {
@@ -23,5 +23,4 @@ public class Turnstile implements Runnable {
 			
 		}
 	}
-
 }
